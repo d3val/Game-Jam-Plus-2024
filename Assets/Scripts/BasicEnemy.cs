@@ -7,9 +7,12 @@ public class BasicEnemy : MonoBehaviour
     public Transform player;
     public float detectionRadius = 5.0f;
     public float speed = 2.0f;
+    public string targetTag = "Player";
+    public int health = 100;
 
     private Rigidbody2D rb;
     private Vector2 movement;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -33,4 +36,14 @@ public class BasicEnemy : MonoBehaviour
         
         rb.MovePosition(rb.position + movement * speed * Time.deltaTime);
     }
+
+    /*
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            collision.GetComponent<PlayerController>().RecieveDamage();
+        }
+    }
+    */
 }
