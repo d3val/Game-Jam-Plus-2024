@@ -13,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Animator animator;
     float horizontalMove;
     float verticalMove;
+    Vector2 playerDirection;
+    Vector2 lastPlayerDirection;
 
     //Attacking variables
     [Header("Attack elements")]
@@ -22,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
     bool isAttacking = false;
     public ThrowableItem currentItem;
     [SerializeField] Transform throwPos;
-    [SerializeField] float throwingAngle = 30;
+    [SerializeField] float throwForce = 3;
     bool isCarrying;
 
     //Input variables
@@ -121,6 +123,14 @@ public class PlayerMovement : MonoBehaviour
          isAttacking = false;*/
     }
 
+    private void Update()
+    {
+        if (playerDirection.magnitude != 0)
+        {
+            lastPlayerDirection = playerDirection;
+        }
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -130,26 +140,30 @@ public class PlayerMovement : MonoBehaviour
     //Moves the player
     void Move()
     {
-        Vector3 direction = new Vector2(verticalMove, horizontalMove);
-        CalculateSpriteDirection(direction);
+        playerDirection = new Vector2(verticalMove, horizontalMove);
+        CalculateSpriteDirection();
         // rigidbody2.AddForce(speed * Time.deltaTime * direction.normalized);
         // transform.Translate(speed * Time.deltaTime * direction.normalized);
-        rigidbody2.velocity = speed * direction.normalized;
+        rigidbody2.velocity = speed * playerDirection.normalized;
         // Debug.Log("Velocidad: " + rigidbody2.velocity.magnitude);
     }
 
-    void CalculateSpriteDirection(Vector3 direction)
+    void CalculateSpriteDirection()
     {
-        if (direction.magnitude != 0)
+        if (playerDirection.magnitude != 0)
+        {
             animator.SetBool("Run", true);
+        }
         else
             animator.SetBool("Run", false);
 
-        if (direction.x > 0)
+        if (playerDirection.x > 0)
         {
             transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            return;
         }
-        else if (direction.x < 0)
+
+        if (playerDirection.x < 0)
         {
             transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         }
@@ -162,7 +176,8 @@ public class PlayerMovement : MonoBehaviour
         if (isCarrying)
         {
             currentItem.DetachParent();
-            currentItem.Throw(CalculateThrowDirection());
+            CalculateSpriteDirection();
+            currentItem.Throw(CalculatePlayerDirection());
             isCarrying = false;
             return;
         }
@@ -173,20 +188,26 @@ public class PlayerMovement : MonoBehaviour
         isCarrying = true;
     }
 
+    Vector2 CalculatePlayerDirection()
+    {
+        Vector2 ThrowDirection;
+        if (playerDirection.magnitude != 0)
+        {
+            ThrowDirection = playerDirection * throwForce;
+        }
+        else
+        {
+            ThrowDirection = lastPlayerDirection.normalized * throwForce;
+        }
+        return ThrowDirection;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("ThrowableItem") && !isCarrying)
         {
             currentItem = collision.gameObject.GetComponent<ThrowableItem>();
         }
-    }
-
-    Vector3 CalculateThrowDirection()
-    {
-        float yComponent = Mathf.Tan(throwingAngle * Mathf.Deg2Rad);
-        Vector3 vectorY = new Vector2(0, yComponent * throwPos.right.x);
-        Vector3 direction = throwPos.right + vectorY;
-        return direction.normalized;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
