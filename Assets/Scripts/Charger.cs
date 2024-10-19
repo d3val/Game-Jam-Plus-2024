@@ -12,6 +12,8 @@ public class Charger : MonoBehaviour
 
     private Rigidbody2D rb;
     private Vector2 movement;
+    private bool wait = false;
+    private bool prepare = false;
 
 
     // Start is called before the first frame update
@@ -23,6 +25,11 @@ public class Charger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (wait)
+        {
+            
+            return;
+        }
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
         if (distanceToPlayer < detectionRadius)
         {
@@ -35,6 +42,14 @@ public class Charger : MonoBehaviour
         }
 
         transform.Translate(movement * speed * Time.deltaTime);
+    }
+
+    private IEnumerator prepareAttack()
+    {
+
+        wait = true;
+        yield return new WaitForSeconds(0.5f);
+        wait = false;
     }
 
     // Hacer daño a jugador

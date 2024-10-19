@@ -1,68 +1,112 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Slime : MonoBehaviour
 {
-    public Transform player;               // Referencia al jugador
-    public float detectionRadius = 5.0f;   // Radio de detección
-    public float jumpDistance = 1.0f;      // Distancia recorrida por cada salto
-    public float jumpSpeed = 5.0f;         // Velocidad del salto
-    public float pauseTime = 0.5f;         // Tiempo de pausa entre saltos
-    public float jumpInterval = 1.0f;      // Tiempo entre intentos de salto
+    public Transform player;
+    public float detectionRadius = 8.0f;
+    public float attackRadius = 2.0f;
+    public float attackChargeTime = 1.0f;
+    public float attackSpeed = 10.0f;
+    public float speed = 5.0f;
+    public string targetTag = "Player";
 
-    private Rigidbody2D rb;                // Referencia al Rigidbody2D
-    private bool isJumping = false;        // Controla si está saltando
-    private float jumpTimer = 0.0f;        // Controla el intervalo entre saltos
+    private Rigidbody2D rb;
+    private Vector2 movement;
+    private bool isAttacking = false;
+    private float attackTimer = 0.0f;
+    private bool getPosition = true;
+    private Vector3 tempPosition;
+    private bool wait = false;
+    private float tempSpeed;
 
+
+    // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();  // Inicializa el Rigidbody2D
-        rb.gravityScale = 0;               // Desactiva la gravedad si no la necesitas
+        rb = GetComponent<Rigidbody2D>();
     }
 
+    // Update is called once per frame
     void Update()
     {
+        if (wait)
+        {
+            return;
+        }
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
-
-
-        if (distanceToPlayer <= detectionRadius)  // Si el jugador está en rango
+        if (distanceToPlayer < detectionRadius)
         {
-            jumpTimer += Time.deltaTime;
-
-            if (!isJumping && jumpTimer >= jumpInterval)  // Inicia un salto si no está saltando
+            tempSpeed = speed;
+            if (distanceToPlayer < attackRadius)
             {
-                StartCoroutine(JumpTowardsPlayer());  // Ejecuta la corrutina del salto
-                jumpTimer = 0;  // Reinicia el temporizador de salto
+                if (getPosition)
+                {
+                    tempPosition = player.position;
+                    getPosition = false;
+                    isAttacking = true;
+                    StartCoroutine(prepareAttack());
+                }
+                tempSpeed = attackSpeed;
             }
+            if (isAttacking)
+            {
+                Vector2 direction = (tempPosition - transform.position).normalized;
+                movement = new Vector2(direction.x, direction.y);
+
+                //Codigo para experar un tiempo de aturdimiento, luego establecer isAtacking en false
+
+                
+                if(Vector2.Distance(transform.position, tempPosition) <=0.1)
+                {
+                    StartCoroutine(prepareAttack());
+
+                    isAttacking = false;
+                    getPosition = true;
+                }
+            }
+            else
+            {
+                Vector2 direction = (player.position - transform.position).normalized;
+                movement = new Vector2(direction.x, direction.y);
+            }
+            
         }
-    }
-
-    private IEnumerator JumpTowardsPlayer()
-    {
-        isJumping = true;  // Marca que el slime está en movimiento
-
-        // Calcula la dirección hacia el jugador
-        Vector2 direction = (player.position - transform.position).normalized;
-        Vector2 targetPosition = rb.position + direction * jumpDistance;
-
-        // Desactiva la física momentáneamente durante el salto
-        rb.velocity = Vector2.zero;
-        rb.isKinematic = true;
-
-        // Mueve el slime hacia la posición objetivo
-        while (Vector2.Distance(rb.position, targetPosition) > 0.1f)
+        else
         {
-            rb.MovePosition(Vector2.MoveTowards(rb.position, targetPosition, jumpSpeed * Time.deltaTime));
-            yield return null;  // Espera un frame antes de continuar
+            movement = Vector2.zero;
         }
 
-        // Pausa en la nueva posición
-        yield return new WaitForSeconds(pauseTime);
-
-        // Reactiva la física y el movimiento
-        rb.isKinematic = false;
-        rb.velocity = Vector2.zero;
-
-        isJumping = false;  // Marca que terminó el salto
+        transform.Translate(movement * tempSpeed * Time.deltaTime);
     }
+
+    private IEnumerator prepareAttack()
+    {
+
+        wait = true;
+        yield return new WaitForSeconds(0.5f);
+        wait = false;
+    }
+
+
+    // Hacer daño a jugador
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            //collision.GetComponent<PlayerMovement>().RecieveDamage();
+            Destroy(gameObject);
+        }
+    }
+
+
+    //Recibir daño
+    private void receiveDamage()
+    {
+        Destroy(gameObject);
+    }
+
 }
+
+
