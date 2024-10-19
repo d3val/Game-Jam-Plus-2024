@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     bool isAttacking = false;
     public ThrowableItem currentItem;
     [SerializeField] Transform throwPos;
+    [SerializeField] float throwingAngle = 30;
     bool isCarrying;
 
     //Input variables
@@ -139,7 +140,7 @@ public class PlayerMovement : MonoBehaviour
         if (isCarrying)
         {
             currentItem.DetachParent();
-            currentItem.Throw(transform.right);
+            currentItem.Throw(CalculateThrowDirection());
             isCarrying = false;
             return;
         }
@@ -151,15 +152,23 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("ThrowableItem"))
+        if (collision.gameObject.CompareTag("ThrowableItem") && !isCarrying)
         {
             currentItem = collision.gameObject.GetComponent<ThrowableItem>();
         }
     }
 
+    Vector3 CalculateThrowDirection()
+    {
+        float yComponent = Mathf.Tan(throwingAngle * Mathf.Deg2Rad);
+        Vector3 vectorY = new Vector2(0, yComponent * throwPos.right.x);
+        Vector3 direction = throwPos.right + vectorY;
+        return direction.normalized;
+    }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("ThrowableItem"))
+        if (collision.gameObject.CompareTag("ThrowableItem") && !isCarrying)
         {
             currentItem = null;
         }

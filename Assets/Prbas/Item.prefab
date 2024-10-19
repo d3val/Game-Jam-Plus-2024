@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e883c9f5d1433eb4195d31648ef4296d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  throwForce: 50
+  throwForce: 100
   torque: -10
   lifeTime: 0.5
 --- !u!50 &1616253975143168280
