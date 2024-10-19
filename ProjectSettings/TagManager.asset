@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ThrowableItem
   - Enemy
+  - Muro
   layers:
   - Default
   - TransparentFX
