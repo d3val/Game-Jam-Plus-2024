@@ -9,6 +9,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement parameters")]
     [SerializeField] float speed = 5f;
     [SerializeField] float sprintSpeedMultiplier = 1.75f;
+    [SerializeField] SpriteRenderer spriteRenderer;
+    [SerializeField] Animator animator;
     float horizontalMove;
     float verticalMove;
 
@@ -83,6 +85,7 @@ public class PlayerMovement : MonoBehaviour
     void GetHorizontalMove(InputAction.CallbackContext ctx)
     {
         horizontalMove = ctx.ReadValue<float>();
+
     }
     void GetVerticalMove(InputAction.CallbackContext ctx)
     {
@@ -128,9 +131,28 @@ public class PlayerMovement : MonoBehaviour
     void Move()
     {
         Vector3 direction = new Vector2(verticalMove, horizontalMove);
+        CalculateSpriteDirection(direction);
         // rigidbody2.AddForce(speed * Time.deltaTime * direction.normalized);
-        transform.Translate(speed * Time.deltaTime * direction.normalized);
+        // transform.Translate(speed * Time.deltaTime * direction.normalized);
+        rigidbody2.velocity = speed * direction.normalized;
         // Debug.Log("Velocidad: " + rigidbody2.velocity.magnitude);
+    }
+
+    void CalculateSpriteDirection(Vector3 direction)
+    {
+        if (direction.magnitude != 0)
+            animator.SetBool("Run", true);
+        else
+            animator.SetBool("Run", false);
+
+        if (direction.x > 0)
+        {
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+        else if (direction.x < 0)
+        {
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
     }
 
     public void Grab(InputAction.CallbackContext ctx)
@@ -145,8 +167,9 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
+        currentItem.rb.isKinematic = true;
         currentItem.transform.position = throwPos.position;
-        currentItem.transform.SetParent(transform);
+        currentItem.transform.SetParent(throwPos);
         isCarrying = true;
     }
 
