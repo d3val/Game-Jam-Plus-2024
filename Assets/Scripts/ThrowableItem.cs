@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class ThrowableItem : MonoBehaviour
 {
-    Rigidbody2D rb;
-    [SerializeField] float throwForce = 5;
+    public Rigidbody2D rb { get; private set; }
     [SerializeField] float torque = 10;
     [SerializeField] float lifeTime = 0.5f;
     bool isBeingThrowed = false;
@@ -25,9 +24,10 @@ public class ThrowableItem : MonoBehaviour
 
     public void Throw(Vector2 direction)
     {
+        rb.isKinematic = false;
         isBeingThrowed = true;
         StartCoroutine(Fall());
-        rb.AddForce(direction * throwForce, ForceMode2D.Impulse);
+        rb.AddForce(direction, ForceMode2D.Impulse);
         rb.AddTorque(torque, ForceMode2D.Impulse);
         rb.gravityScale = 1;
     }

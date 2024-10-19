@@ -198,7 +198,7 @@
                 {
                     "name": "",
                     "id": "dac67000-349d-49a2-afb2-a8234db1a67b",
-                    "path": "<Keyboard>/leftCtrl",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -264,10 +264,21 @@
                 {
                     "name": "",
                     "id": "e665e907-487f-421a-a3af-7615d819d959",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
+                    "action": "Grab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "de81b282-b1f3-4d4a-9d82-383b7115104b",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
                     "action": "Grab",
                     "isComposite": false,
                     "isPartOfComposite": false
