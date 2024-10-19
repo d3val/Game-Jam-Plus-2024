@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
 
     //Attacking variables
     [Header("Attack elements")]
-    //  [SerializeField] GameObject attackingHitBox;
+    [SerializeField] GameObject attackingHitBox;
     [SerializeField] float attackingTime = 1;
     public float attackDamage = 10;
     bool isAttacking = false;
@@ -116,11 +116,12 @@ public class PlayerMovement : MonoBehaviour
     //Attack sequence
     IEnumerator Attack()
     {
-        /*isAttacking = true;
-        attackingHitBox.SetActive(true);*/
+        animator.SetTrigger("Attack");
+        isAttacking = true;
+        attackingHitBox.SetActive(true);
         yield return new WaitForSeconds(attackingTime);
-        /* attackingHitBox.SetActive(false);
-         isAttacking = false;*/
+        //attackingHitBox.SetActive(false);
+        isAttacking = false;
     }
 
     private void Update()
