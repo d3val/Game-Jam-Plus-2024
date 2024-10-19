@@ -37,13 +37,20 @@ public class BasicEnemy : MonoBehaviour
         rb.MovePosition(rb.position + movement * speed * Time.deltaTime);
     }
 
-    /*
+    // Hacer daño a jugador
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            collision.GetComponent<PlayerController>().RecieveDamage();
+            //collision.GetComponent<PlayerMovement>().RecieveDamage();
         }
     }
-    */
+    
+
+    //Recibir daño
+    private void receiveDamage()
+    {
+        Destroy(gameObject);
+    }
+    
 }
