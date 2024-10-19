@@ -17,6 +17,7 @@ public class HolaMundo : MonoBehaviour
     {
         instance = this;
         rederer = GetComponent<SpriteRenderer>();
+        Debug.Log("hola hola hola");
 
     }
 
