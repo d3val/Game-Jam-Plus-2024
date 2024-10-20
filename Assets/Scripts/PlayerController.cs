@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement parameters")]
     [SerializeField] float speed = 5f;
     [SerializeField] float sprintSpeedMultiplier = 1.75f;
+    [SerializeField] GameObject staminaSliderGameObject;
+    Slider staminaSlider;
     [SerializeField] SpriteRenderer spriteRenderer;
     [SerializeField] Animator animator;
     float horizontalMove;
@@ -63,6 +66,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         rigidbody2 = GetComponent<Rigidbody2D>();
+        staminaSlider = staminaSliderGameObject.GetComponent<Slider>();
     }
 
     private void OnEnable()
@@ -119,9 +123,20 @@ public class PlayerMovement : MonoBehaviour
         animator.SetTrigger("Attack");
         isAttacking = true;
         attackingHitBox.SetActive(true);
-        yield return new WaitForSeconds(attackingTime);
+        yield return StartCoroutine(Cooldown());
         //attackingHitBox.SetActive(false);
         isAttacking = false;
+    }
+
+    IEnumerator Cooldown()
+    {
+        staminaSliderGameObject.SetActive(true);
+        for (float i = 0; i < attackingTime; i += Time.deltaTime)
+        {
+            staminaSlider.value = Mathf.Lerp(staminaSlider.minValue, staminaSlider.maxValue, i / attackingTime);
+            yield return null;
+        }
+        staminaSliderGameObject.SetActive(false);
     }
 
     private void Update()
