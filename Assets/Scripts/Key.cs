@@ -4,12 +4,9 @@ using UnityEngine;
 
 public class Key : MonoBehaviour
 {
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void RemoveKey()
     {
-        if (collision.CompareTag("Player"))
-        {
-            LockedDoor.instance.RemoveKey(gameObject);
-        }
-        Destroy(gameObject);
+        LockedDoor.instance.RemoveKey(this.gameObject);
+        Destroy(this.gameObject);
     }
 }
