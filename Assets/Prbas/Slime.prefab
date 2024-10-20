@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4.6438656, y: 4.6438656, z: 4.6438656}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -100,11 +100,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  detectionRadius: 10
-  attackRadius: 4
+  detectionRadius: 0.8
+  attackRadius: 1
   attackChargeTime: 1
-  attackSpeed: 10
-  speed: 5
+  attackSpeed: 2
+  speed: 1.25
   targetTag: Player
   damageAmount: 30
 --- !u!50 &4494427499187508809
