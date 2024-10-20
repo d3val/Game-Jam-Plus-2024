@@ -41,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
     InputAction attackAction;
     InputAction GrabAction;
     Rigidbody2D rigidbody2;
+    [SerializeField] GameObject GameOverPanel;
 
     void Awake()
     {
@@ -264,7 +265,9 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log(health);
         if (health <= 0)
         {
-            Destroy(gameObject);
+            rigidbody2.velocity = Vector2.zero;
+            GameOverPanel.SetActive(true);
+            this.enabled = false;
         }
     }
 }
