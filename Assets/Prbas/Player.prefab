@@ -685,7 +685,7 @@ MonoBehaviour:
   isAttacking: 0
   currentItem: {fileID: 0}
   throwPos: {fileID: 948501373630684170}
-  throwForce: 150
+  throwForce: 50
   actionAsset: {fileID: -944628639613478452, guid: 4ccb5773d1c3b8d44a8364e6710df63e, type: 3}
 --- !u!61 &7591280961035274292
 BoxCollider2D:
