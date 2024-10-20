@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Charger : MonoBehaviour
@@ -14,6 +15,9 @@ public class Charger : MonoBehaviour
     private bool prepare = true;       // Control de preparación del ataque
     private bool isStopped = false;    // Si el enemigo se ha detenido por una colisión
     public int damageAmount = 10;
+    bool isAttacking = false;
+    bool wereRepeled = false;
+    public float lifeTime = 2;
 
     void Start()
     {
@@ -46,11 +50,13 @@ public class Charger : MonoBehaviour
     private IEnumerator PrepareAttack()
     {
         wait = true;
+        GetComponent<SpriteRenderer>().color = Color.red;
         yield return new WaitForSeconds(1); // Espera antes del impulso
 
         Vector2 direction = (player.position - transform.position).normalized; // Dirección hacia el jugador
         rb.AddForce(direction * impulseForce, ForceMode2D.Impulse); // Aplica el impulso
 
+        isAttacking = true;
         hasDetected = true; // Marca que ya detectó al jugador
         wait = false;
         isStopped = false;
@@ -58,10 +64,10 @@ public class Charger : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        
+
         if (collision.gameObject.CompareTag("Muro")) // Si colisiona con un muro
         {
-            
+
             rb.velocity = Vector2.zero;  // Detiene el movimiento
             isStopped = true;  // Marca que el enemigo está detenido
         }
@@ -69,35 +75,69 @@ public class Charger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        
-        if (collision.CompareTag("Player"))
+        if (wereRepeled)
+        {
+            if (collision.gameObject.CompareTag("Charger"))
+            {
+                collision.gameObject.GetComponent<Charger>().receiveDamage();
+            }
+            else if (collision.gameObject.CompareTag("BasicEnemy"))
+            {
+                collision.gameObject.GetComponent<BasicEnemy>().receiveDamage();
+            }
+            else if (collision.gameObject.CompareTag("Slime"))
+            {
+                collision.gameObject.GetComponent<Slime>().receiveDamage();
+            }
+
+        }
+
+        /*if (collision.CompareTag("Player"))
         {
             PlayerMovement player = collision.GetComponent<PlayerMovement>();
 
             if (player.isAttacking)
             {
                 Debug.Log("Esta atacando!");
-                receiveDamage();
+                //receiveDamage();
             }
             else
             {
                 if (player != null)  // Verifica que el jugador tenga el script
                 {
                     player.receiveDamage(damageAmount);  // Aplica daño
-                }
+                
             }
         }
         if (collision.CompareTag("Muro")) // Si colisiona con un muro
         {
-            
+
             rb.velocity = Vector2.zero;  // Detiene el movimiento
+            StopAllCoroutines();
             isStopped = true;  // Marca que el enemigo está detenido
-        }
+        }*/
     }
 
     // Recibir daño y destruir al enemigo
     public void receiveDamage()
     {
+        if (isAttacking)
+        {
+            StartCoroutine(ChangeDirection());
+            return;
+        }
+
+        Destroy(gameObject);
+    }
+
+    IEnumerator ChangeDirection()
+    {
+        wereRepeled = true;
+        GetComponent<Collider2D>().isTrigger = true;
+        GetComponent<SpriteRenderer>().color = Color.blue;
+        Vector2 direction = (transform.position - player.position).normalized; // Dirección hacia el jugador
+        rb.AddForce(direction * impulseForce, ForceMode2D.Impulse); // Aplica el 
+        yield return new WaitForSeconds(lifeTime);
         Destroy(gameObject);
     }
 }

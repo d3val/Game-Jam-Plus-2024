@@ -281,6 +281,11 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &557012975 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7088946867301302490, guid: 9e8089e107c74104898d76c4382c85be, type: 3}
+  m_PrefabInstance: {fileID: 683647425}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &683647425
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -337,8 +342,13 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 8478220369941678231, guid: 9e8089e107c74104898d76c4382c85be, type: 3}
+      propertyPath: comodin
+      value: 
+      objectReference: {fileID: 557012975}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2599646312246143580, guid: 9e8089e107c74104898d76c4382c85be, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8022798729101225337, guid: 9e8089e107c74104898d76c4382c85be, type: 3}
@@ -362,7 +372,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1302804239}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -593,6 +603,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Charger
       objectReference: {fileID: 0}
+    - target: {fileID: 5087364908876063837, guid: ee7655ceb7b18d54b9cc54dd2f9f7112, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -648,6 +662,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1699473856835710244, guid: 760db59a24c9e9343a700d24c82bac52, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4468513763131517465, guid: 760db59a24c9e9343a700d24c82bac52, type: 3}
+      propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6481287822037155678, guid: 760db59a24c9e9343a700d24c82bac52, type: 3}
@@ -714,6 +732,10 @@ PrefabInstance:
     - target: {fileID: 6825145532064865718, guid: 5d47d8c263d698f45846aa7aa96286c2, type: 3}
       propertyPath: m_Name
       value: Slime
+      objectReference: {fileID: 0}
+    - target: {fileID: 9079581339791806897, guid: 5d47d8c263d698f45846aa7aa96286c2, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
