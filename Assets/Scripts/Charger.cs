@@ -1,6 +1,7 @@
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Charger : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class Charger : MonoBehaviour
     bool isAttacking = false;
     bool wereRepeled = false;
     public float lifeTime = 2;
+    public UnityEvent OnRepeled;
 
     void Start()
     {
@@ -30,6 +32,7 @@ public class Charger : MonoBehaviour
         {
             return;
         }
+        CalculateSpriteDirection();
         if (isStopped)
         {
             isStopped = false;
@@ -133,11 +136,32 @@ public class Charger : MonoBehaviour
     IEnumerator ChangeDirection()
     {
         wereRepeled = true;
+        isAttacking = false;
+        OnRepeled.Invoke();
         GetComponent<Collider2D>().isTrigger = true;
         GetComponent<SpriteRenderer>().color = Color.blue;
         Vector2 direction = (transform.position - player.position).normalized; // Dirección hacia el jugador
         rb.AddForce(direction * impulseForce, ForceMode2D.Impulse); // Aplica el 
         yield return new WaitForSeconds(lifeTime);
         Destroy(gameObject);
+    }
+
+    void CalculateSpriteDirection()
+    {
+        Vector2 direction = player.position - transform.position;
+        bool condition;
+        if (direction.x < transform.position.x)
+        {
+            condition = true;
+        }
+        else
+        {
+            condition = false;
+        }
+
+        if (wereRepeled)
+            condition = !condition;
+
+        GetComponent<SpriteRenderer>().flipX = condition;
     }
 }
