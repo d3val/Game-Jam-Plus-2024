@@ -166,7 +166,6 @@ GameObject:
   - component: {fileID: 1540125257354370347}
   - component: {fileID: 2822265055634188708}
   - component: {fileID: 8478220369941678231}
-  - component: {fileID: 8101273296637784044}
   - component: {fileID: 6178692320739365347}
   - component: {fileID: 2996140576130693158}
   m_Layer: 0
@@ -277,19 +276,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   comodin: {fileID: 2599646312246143580}
---- !u!114 &8101273296637784044
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7560095174105425540}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8a40f9aacfc7694fbc9447772be36d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  comodin: {fileID: 7088946867301302490}
 --- !u!82 &6178692320739365347
 AudioSource:
   m_ObjectHideFlags: 0
@@ -301,7 +287,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -552,6 +538,7 @@ MonoBehaviour:
   attackingHitBox: {fileID: 7088946867301302490}
   attackingTime: 1
   attackDamage: 10
+  isAttacking: 0
   currentItem: {fileID: 0}
   throwPos: {fileID: 948501373630684170}
   throwForce: 150
