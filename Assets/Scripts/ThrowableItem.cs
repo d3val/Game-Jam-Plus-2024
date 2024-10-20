@@ -6,7 +6,7 @@ public class ThrowableItem : MonoBehaviour
 {
     public Rigidbody2D rb { get; private set; }
     [SerializeField] float torque = 10;
-    [SerializeField] float lifeTime = 0.5f;
+    [SerializeField] protected float lifeTime = 0.5f;
     bool isBeingThrowed = false;
 
 
@@ -30,6 +30,7 @@ public class ThrowableItem : MonoBehaviour
         rb.AddForce(direction, ForceMode2D.Impulse);
         rb.AddTorque(torque, ForceMode2D.Impulse);
         rb.gravityScale = 1;
+        rb.angularDrag = 0f;  // Aumentar la fricción angular para disipar la rotación
     }
 
     public void DetachParent()
@@ -37,7 +38,7 @@ public class ThrowableItem : MonoBehaviour
         transform.SetParent(null);
     }
 
-    IEnumerator Fall()
+    public virtual IEnumerator Fall()
     {
         yield return new WaitForSeconds(lifeTime);
         Destroy(gameObject);
