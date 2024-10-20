@@ -218,4 +218,13 @@ public class PlayerMovement : MonoBehaviour
             currentItem = null;
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Key"))
+        {
+            collision.gameObject.GetComponent<Key>().RemoveKey();
+            return;
+        }
+    }
 }
