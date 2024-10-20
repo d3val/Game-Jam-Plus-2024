@@ -24,6 +24,7 @@ public class Charger : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>(); // Obtener el Rigidbody2D
+        player = GameObject.FindWithTag(targetTag).transform;
     }
 
     void Update()
