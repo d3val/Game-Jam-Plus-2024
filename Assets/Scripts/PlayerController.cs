@@ -9,18 +9,22 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement parameters")]
     [SerializeField] float speed = 5f;
     [SerializeField] float sprintSpeedMultiplier = 1.75f;
+    [SerializeField] SpriteRenderer spriteRenderer;
+    [SerializeField] Animator animator;
     float horizontalMove;
     float verticalMove;
+    Vector2 playerDirection;
+    Vector2 lastPlayerDirection;
 
     //Attacking variables
     [Header("Attack elements")]
-    //  [SerializeField] GameObject attackingHitBox;
+    [SerializeField] GameObject attackingHitBox;
     [SerializeField] float attackingTime = 1;
     public float attackDamage = 10;
     bool isAttacking = false;
     public ThrowableItem currentItem;
     [SerializeField] Transform throwPos;
-    [SerializeField] float throwingAngle = 30;
+    [SerializeField] float throwForce = 3;
     bool isCarrying;
 
     //Input variables
@@ -83,6 +87,7 @@ public class PlayerMovement : MonoBehaviour
     void GetHorizontalMove(InputAction.CallbackContext ctx)
     {
         horizontalMove = ctx.ReadValue<float>();
+
     }
     void GetVerticalMove(InputAction.CallbackContext ctx)
     {
@@ -111,11 +116,20 @@ public class PlayerMovement : MonoBehaviour
     //Attack sequence
     IEnumerator Attack()
     {
-        /*isAttacking = true;
-        attackingHitBox.SetActive(true);*/
+        animator.SetTrigger("Attack");
+        isAttacking = true;
+        attackingHitBox.SetActive(true);
         yield return new WaitForSeconds(attackingTime);
-        /* attackingHitBox.SetActive(false);
-         isAttacking = false;*/
+        //attackingHitBox.SetActive(false);
+        isAttacking = false;
+    }
+
+    private void Update()
+    {
+        if (playerDirection.magnitude != 0)
+        {
+            lastPlayerDirection = playerDirection;
+        }
     }
 
     // Update is called once per frame
@@ -127,10 +141,33 @@ public class PlayerMovement : MonoBehaviour
     //Moves the player
     void Move()
     {
-        Vector3 direction = new Vector2(verticalMove, horizontalMove);
+        playerDirection = new Vector2(verticalMove, horizontalMove);
+        CalculateSpriteDirection();
         // rigidbody2.AddForce(speed * Time.deltaTime * direction.normalized);
-        transform.Translate(speed * Time.deltaTime * direction.normalized);
+        // transform.Translate(speed * Time.deltaTime * direction.normalized);
+        rigidbody2.velocity = speed * playerDirection.normalized;
         // Debug.Log("Velocidad: " + rigidbody2.velocity.magnitude);
+    }
+
+    void CalculateSpriteDirection()
+    {
+        if (playerDirection.magnitude != 0)
+        {
+            animator.SetBool("Run", true);
+        }
+        else
+            animator.SetBool("Run", false);
+
+        if (playerDirection.x > 0)
+        {
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            return;
+        }
+
+        if (playerDirection.x < 0)
+        {
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
     }
 
     public void Grab(InputAction.CallbackContext ctx)
@@ -140,14 +177,30 @@ public class PlayerMovement : MonoBehaviour
         if (isCarrying)
         {
             currentItem.DetachParent();
-            currentItem.Throw(CalculateThrowDirection());
+            CalculateSpriteDirection();
+            currentItem.Throw(CalculatePlayerDirection());
             isCarrying = false;
             return;
         }
 
+        currentItem.rb.isKinematic = true;
         currentItem.transform.position = throwPos.position;
-        currentItem.transform.SetParent(transform);
+        currentItem.transform.SetParent(throwPos);
         isCarrying = true;
+    }
+
+    Vector2 CalculatePlayerDirection()
+    {
+        Vector2 ThrowDirection;
+        if (playerDirection.magnitude != 0)
+        {
+            ThrowDirection = playerDirection * throwForce;
+        }
+        else
+        {
+            ThrowDirection = lastPlayerDirection.normalized * throwForce;
+        }
+        return ThrowDirection;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -158,19 +211,20 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    Vector3 CalculateThrowDirection()
-    {
-        float yComponent = Mathf.Tan(throwingAngle * Mathf.Deg2Rad);
-        Vector3 vectorY = new Vector2(0, yComponent * throwPos.right.x);
-        Vector3 direction = throwPos.right + vectorY;
-        return direction.normalized;
-    }
-
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("ThrowableItem") && !isCarrying)
         {
             currentItem = null;
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Key"))
+        {
+            collision.gameObject.GetComponent<Key>().RemoveKey();
+            return;
         }
     }
 }

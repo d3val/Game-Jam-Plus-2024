@@ -6,7 +6,8 @@ TagManager:
   tags:
   - ThrowableItem
   - Enemy
-  - Muro
+  - Bat
+  - Key
   layers:
   - Default
   - TransparentFX
