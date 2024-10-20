@@ -11,6 +11,7 @@ public class Slime : MonoBehaviour
     public float attackSpeed = 10.0f;
     public float speed = 5.0f;
     public string targetTag = "Player";
+    public int damageAmount = 30;
 
     private Rigidbody2D rb;
     private Vector2 movement;
@@ -31,6 +32,10 @@ public class Slime : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (player == null)
+        {
+            return;
+        }
         if (wait)
         {
             return;
@@ -46,7 +51,7 @@ public class Slime : MonoBehaviour
                     tempPosition = player.position;
                     getPosition = false;
                     isAttacking = true;
-                    StartCoroutine(prepareAttack());
+                    StartCoroutine(prepareAttack(0.5f));
                 }
                 tempSpeed = attackSpeed;
             }
@@ -60,7 +65,7 @@ public class Slime : MonoBehaviour
                 
                 if(Vector2.Distance(transform.position, tempPosition) <=0.1)
                 {
-                    StartCoroutine(prepareAttack());
+                    StartCoroutine(prepareAttack(2.0f));
 
                     isAttacking = false;
                     getPosition = true;
@@ -81,11 +86,11 @@ public class Slime : MonoBehaviour
         transform.Translate(movement * tempSpeed * Time.deltaTime);
     }
 
-    private IEnumerator prepareAttack()
+    private IEnumerator prepareAttack(float time)
     {
 
         wait = true;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(time);
         wait = false;
     }
 
@@ -95,14 +100,27 @@ public class Slime : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            //collision.GetComponent<PlayerMovement>().RecieveDamage();
-            Destroy(gameObject);
+            PlayerMovement player = collision.GetComponent<PlayerMovement>();
+
+            if (player.isAttacking)
+            {
+                Debug.Log("Esta atacando!");
+                receiveDamage();
+            }
+            else
+            {
+                if (player != null)  // Verifica que el jugador tenga el script
+                {
+                    player.receiveDamage(damageAmount);  // Aplica daño
+                    Destroy(gameObject);
+                }
+            }
         }
     }
 
 
     //Recibir daño
-    private void receiveDamage()
+    public void receiveDamage()
     {
         Destroy(gameObject);
     }

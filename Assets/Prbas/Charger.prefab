@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5087364908876063837}
   m_Layer: 0
   m_Name: Charger
-  m_TagString: Muro
+  m_TagString: Charger
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -103,6 +103,7 @@ MonoBehaviour:
   detectionRadius: 5
   impulseForce: 15
   targetTag: Player
+  damageAmount: 10
 --- !u!50 &7988846202089519517
 Rigidbody2D:
   serializedVersion: 4

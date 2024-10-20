@@ -18,13 +18,14 @@ public class PlayerMovement : MonoBehaviour
     float verticalMove;
     Vector2 playerDirection;
     Vector2 lastPlayerDirection;
+    int health = 100;
 
     //Attacking variables
     [Header("Attack elements")]
     [SerializeField] GameObject attackingHitBox;
     [SerializeField] float attackingTime = 1;
     public float attackDamage = 10;
-    bool isAttacking = false;
+    public bool isAttacking = false;
     public ThrowableItem currentItem;
     [SerializeField] Transform throwPos;
     [SerializeField] float throwForce = 3;
@@ -241,5 +242,29 @@ public class PlayerMovement : MonoBehaviour
             collision.gameObject.GetComponent<Key>().RemoveKey();
             return;
         }
+        if (collision.gameObject.CompareTag("Slime"))
+        {
+            collision.gameObject.GetComponent<Slime>().receiveDamage();
+        }
+        if (collision.gameObject.CompareTag("Charger"))
+        {
+            collision.gameObject.GetComponent<Charger>().receiveDamage();
+        }
+        if (collision.gameObject.CompareTag("BasicEnemy"))
+        {
+            collision.gameObject.GetComponent<BasicEnemy>().receiveDamage();
+        }
     }
+
+    public void receiveDamage(int damage)
+    {
+        health -= damage;
+        Debug.Log(health);
+        if(health <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+
 }

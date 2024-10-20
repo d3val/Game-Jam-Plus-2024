@@ -8,6 +8,10 @@ TagManager:
   - Enemy
   - Bat
   - Key
+  - Muro
+  - Slime
+  - Charger
+  - BasicEnemy
   layers:
   - Default
   - TransparentFX

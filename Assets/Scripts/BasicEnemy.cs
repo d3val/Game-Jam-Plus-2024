@@ -9,6 +9,7 @@ public class BasicEnemy : MonoBehaviour
     public float speed = 2.0f;
     public string targetTag = "Player";
     public int health = 100;
+    public int damageAmount = 10;
 
     private Rigidbody2D rb;
     private Vector2 movement;
@@ -23,6 +24,10 @@ public class BasicEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(player == null)
+        {
+            return;
+        }
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
         if(distanceToPlayer < detectionRadius)
         {
@@ -42,13 +47,26 @@ public class BasicEnemy : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            //collision.GetComponent<PlayerMovement>().RecieveDamage();
+            PlayerMovement player = collision.GetComponent<PlayerMovement>();
+
+            if (player.isAttacking)
+            {
+                Debug.Log("Esta atacando!");
+                receiveDamage();
+            }
+            else
+            {
+                if (player != null)  // Verifica que el jugador tenga el script
+                {
+                    player.receiveDamage(damageAmount);  // Aplica daño
+                }
+            }
         }
     }
     
 
     //Recibir daño
-    private void receiveDamage()
+    public void receiveDamage()
     {
         Destroy(gameObject);
     }
