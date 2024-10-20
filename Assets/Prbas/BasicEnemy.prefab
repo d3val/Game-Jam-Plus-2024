@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9220146144928227462}
   - component: {fileID: 123041692994623268}
   - component: {fileID: 4468513763131517465}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BasicEnemy
   m_TagString: BasicEnemy
   m_Icon: {fileID: 0}
@@ -132,6 +132,9 @@ MonoBehaviour:
   targetTag: Player
   health: 100
   damageAmount: 10
+  OnDamage:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!61 &4468513763131517465
 BoxCollider2D:
   m_ObjectHideFlags: 0
