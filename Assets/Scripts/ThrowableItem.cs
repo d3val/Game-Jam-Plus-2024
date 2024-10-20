@@ -45,10 +45,22 @@ public class ThrowableItem : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy") && isBeingThrowed)
+        if (!isBeingThrowed)
         {
-            //Hacer daño al enemigo
-            Impact();
+            return;
+        }
+
+        if (collision.gameObject.CompareTag("Charger"))
+        {
+            collision.gameObject.GetComponent<Charger>().receiveDamage();
+        }
+        else if (collision.gameObject.CompareTag("BasicEnemy"))
+        {
+            collision.gameObject.GetComponent<BasicEnemy>().receiveDamage();
+        }
+        else if (collision.gameObject.CompareTag("Slime"))
+        {
+            collision.gameObject.GetComponent<Slime>().receiveDamage();
         }
     }
 }

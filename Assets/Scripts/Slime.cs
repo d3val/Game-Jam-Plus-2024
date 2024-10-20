@@ -27,6 +27,8 @@ public class Slime : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        player = GameObject.FindWithTag(targetTag).transform;
+
     }
 
     // Update is called once per frame

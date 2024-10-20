@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BasicEnemy : MonoBehaviour
 {
@@ -13,12 +14,14 @@ public class BasicEnemy : MonoBehaviour
 
     private Rigidbody2D rb;
     private Vector2 movement;
+    public UnityEvent OnDamage;
     
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        player = GameObject.FindWithTag(targetTag).transform;
     }
 
     // Update is called once per frame
@@ -68,6 +71,7 @@ public class BasicEnemy : MonoBehaviour
     //Recibir daño
     public void receiveDamage()
     {
+        OnDamage.Invoke();
         Destroy(gameObject);
     }
     
