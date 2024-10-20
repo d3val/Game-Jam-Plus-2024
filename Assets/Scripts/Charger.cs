@@ -13,6 +13,7 @@ public class Charger : MonoBehaviour
     private bool wait = false;         // Control del tiempo de espera
     private bool prepare = true;       // Control de preparación del ataque
     private bool isStopped = false;    // Si el enemigo se ha detenido por una colisión
+    public int damageAmount = 10;
 
     void Start()
     {
@@ -21,6 +22,10 @@ public class Charger : MonoBehaviour
 
     void Update()
     {
+        if (player == null)
+        {
+            return;
+        }
         if (isStopped)
         {
             isStopped = false;
@@ -53,10 +58,10 @@ public class Charger : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("onCollision");
+        
         if (collision.gameObject.CompareTag("Muro")) // Si colisiona con un muro
         {
-            Debug.Log("detecta muro");
+            
             rb.velocity = Vector2.zero;  // Detiene el movimiento
             isStopped = true;  // Marca que el enemigo está detenido
         }
@@ -64,23 +69,34 @@ public class Charger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("onTrigger");
-        Debug.Log(collision.tag);
+        
         if (collision.CompareTag("Player"))
         {
-            // Aquí puedes añadir lógica para hacer daño al jugador
-            // collision.GetComponent<PlayerMovement>().ReceiveDamage();
+            PlayerMovement player = collision.GetComponent<PlayerMovement>();
+
+            if (player.isAttacking)
+            {
+                Debug.Log("Esta atacando!");
+                receiveDamage();
+            }
+            else
+            {
+                if (player != null)  // Verifica que el jugador tenga el script
+                {
+                    player.receiveDamage(damageAmount);  // Aplica daño
+                }
+            }
         }
         if (collision.CompareTag("Muro")) // Si colisiona con un muro
         {
-            Debug.Log("detecta muro");
+            
             rb.velocity = Vector2.zero;  // Detiene el movimiento
             isStopped = true;  // Marca que el enemigo está detenido
         }
     }
 
     // Recibir daño y destruir al enemigo
-    private void ReceiveDamage()
+    public void receiveDamage()
     {
         Destroy(gameObject);
     }

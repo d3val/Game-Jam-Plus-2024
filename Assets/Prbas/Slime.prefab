@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 9079581339791806897}
   m_Layer: 0
   m_Name: Slime
-  m_TagString: Untagged
+  m_TagString: Slime
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -106,6 +106,7 @@ MonoBehaviour:
   attackSpeed: 10
   speed: 5
   targetTag: Player
+  damageAmount: 30
 --- !u!50 &4494427499187508809
 Rigidbody2D:
   serializedVersion: 4
