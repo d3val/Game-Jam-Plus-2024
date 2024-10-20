@@ -110,7 +110,7 @@ public class PlayerMovement : MonoBehaviour
 
     void StartAttack(InputAction.CallbackContext ctx)
     {
-        if (isAttacking)
+        if (isAttacking || isCarrying)
         {
             return;
         }
@@ -196,6 +196,7 @@ public class PlayerMovement : MonoBehaviour
             CalculateSpriteDirection();
             currentItem.Throw(CalculatePlayerDirection());
             isCarrying = false;
+            animator.SetBool("Grabbing", isCarrying);
             return;
         }
 
@@ -203,6 +204,7 @@ public class PlayerMovement : MonoBehaviour
         currentItem.transform.position = throwPos.position;
         currentItem.transform.SetParent(throwPos);
         isCarrying = true;
+        animator.SetBool("Grabbing", isCarrying);
     }
 
     Vector2 CalculatePlayerDirection()
@@ -260,7 +262,7 @@ public class PlayerMovement : MonoBehaviour
     {
         health -= damage;
         Debug.Log(health);
-        if(health <= 0)
+        if (health <= 0)
         {
             Destroy(gameObject);
         }
