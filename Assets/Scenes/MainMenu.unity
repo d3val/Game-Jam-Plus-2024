@@ -427,7 +427,13 @@ MonoBehaviour:
     Carlos - Pixel Artist
 
     Ericka Ruiz
-    - Programadora'
+    - Programadora
+
+
+    Fuente de letra: https://not-jam.itch.io/not-jam-font-pack
+
+    Fondo
+    menu: '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1642,7 +1648,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1967266468
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2156,6 +2162,10 @@ PrefabInstance:
     - target: {fileID: 5929568762999075783, guid: 56129c0797cd4124a8e80e0ce05a62af, type: 3}
       propertyPath: m_Name
       value: GameOver
+      objectReference: {fileID: 0}
+    - target: {fileID: 5929568762999075783, guid: 56129c0797cd4124a8e80e0ce05a62af, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
